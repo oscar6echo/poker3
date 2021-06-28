@@ -9,10 +9,13 @@ var FLUSH_RANK = make([]int, MAX_FLUSH_SEVEN_KEY+1)
 var FLUSH_SUIT = make([]int, MAX_SUIT_KEY+1)
 var NB_HAND_SEVEN_RANK int
 
-func BuildEvalSevenTables() {
+func BuildEvalSevenTables(verbose bool) {
 
-	fmt.Println(" ")
-	defer track(runningtime("BuildEvalSevenTables"))
+	if verbose {
+
+		fmt.Println(" ")
+		defer track(runningtime("BuildEvalSevenTables"))
+	}
 
 	var c1, c2, c3, c4, c5, c6, c7 int
 	var handFaceKey uint32
@@ -20,7 +23,6 @@ func BuildEvalSevenTables() {
 	var suitCount int
 
 	// FACE_RANK
-	fmt.Printf("start FACE_RANK\n")
 	for c1 = 0; c1 < NB_FACE; c1++ {
 		for c2 = 0; c2 < c1+1; c2++ {
 			for c3 = 0; c3 < c2+1; c3++ {
@@ -43,7 +45,6 @@ func BuildEvalSevenTables() {
 	}
 
 	// FLUSH_RANK 7 cards
-	fmt.Printf("start FLUSH_RANK 7 cards\n")
 	for c1 = 6; c1 < NB_FACE; c1++ {
 		for c2 = 0; c2 < c1; c2++ {
 			for c3 = 0; c3 < c2; c3++ {
@@ -62,7 +63,6 @@ func BuildEvalSevenTables() {
 		}
 	}
 	// FLUSH_RANK 6 cards
-	fmt.Printf("start FLUSH_RANK 6 cards\n")
 	for c1 = 5; c1 < NB_FACE; c1++ {
 		for c2 = 0; c2 < c1; c2++ {
 			for c3 = 0; c3 < c2; c3++ {
@@ -79,7 +79,6 @@ func BuildEvalSevenTables() {
 		}
 	}
 	// FLUSH_RANK 5 cards
-	fmt.Printf("start FLUSH_RANK 5 cards\n")
 	for c1 = 4; c1 < NB_FACE; c1++ {
 		for c2 = 0; c2 < c1; c2++ {
 			for c3 = 0; c3 < c2; c3++ {
@@ -94,7 +93,6 @@ func BuildEvalSevenTables() {
 		}
 	}
 	// FLUSH_SUIT
-	fmt.Printf("start FLUSH_SUIT\n")
 	for c1 = 0; c1 < NB_SUIT; c1++ {
 		for c2 = 0; c2 < c1+1; c2++ {
 			for c3 = 0; c3 < c2+1; c3++ {

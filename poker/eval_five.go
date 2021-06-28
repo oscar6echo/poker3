@@ -10,17 +10,18 @@ var HAND_FACES [][5]int
 var HAND_TYPE []string
 var NB_HAND_FIVE_RANK int
 
-func BuildEvalFiveTables() {
+func BuildEvalFiveTables(verbose bool) {
 
-	fmt.Println(" ")
-	defer track(runningtime("BuildEvalFiveTables"))
+	if verbose {
+		fmt.Println(" ")
+		defer track(runningtime("BuildEvalFiveTables"))
+	}
 
 	var c1, c2, c3, c4, c5 int
 	var handFaceKey uint32
 	rank := 0
 
 	// High Card
-	fmt.Printf("start high-card\n")
 	for c1 = 4; c1 < NB_FACE; c1++ {
 		for c2 = 0; c2 < c1; c2++ {
 			for c3 = 0; c3 < c2; c3++ {
@@ -41,7 +42,6 @@ func BuildEvalFiveTables() {
 	}
 
 	// One Pair
-	fmt.Printf("start one-pair\n")
 	for c1 = 0; c1 < NB_FACE; c1++ {
 		for c2 = 0; c2 < NB_FACE; c2++ {
 			for c3 = 0; c3 < c2; c3++ {
@@ -60,7 +60,6 @@ func BuildEvalFiveTables() {
 	}
 
 	// Two Pair
-	fmt.Printf("start two-pairs\n")
 	for c1 = 0; c1 < NB_FACE; c1++ {
 		for c2 = 0; c2 < c1; c2++ {
 			for c3 = 0; c3 < NB_FACE; c3++ {
@@ -77,7 +76,6 @@ func BuildEvalFiveTables() {
 	}
 
 	// Three of a kind
-	fmt.Printf("start three-of-a-kind\n")
 	for c1 = 0; c1 < NB_FACE; c1++ {
 		for c2 = 0; c2 < NB_FACE; c2++ {
 			for c3 = 0; c3 < c2; c3++ {
@@ -95,7 +93,6 @@ func BuildEvalFiveTables() {
 	}
 
 	// Low Straight
-	fmt.Printf("start straight (low)\n")
 	c1 = 3
 	c5 = 12
 	handFaceKey = FACE_FIVE_KEY[c1] + FACE_FIVE_KEY[c1-1] + FACE_FIVE_KEY[c1-2] + FACE_FIVE_KEY[c1-3] + FACE_FIVE_KEY[c5]
@@ -105,7 +102,6 @@ func BuildEvalFiveTables() {
 	rank += 1
 
 	// Other Straight
-	fmt.Printf("start straight (other)\n")
 	for c1 = 4; c1 < NB_FACE; c1++ {
 		handFaceKey = FACE_FIVE_KEY[c1] + FACE_FIVE_KEY[c1-1] + FACE_FIVE_KEY[c1-2] + FACE_FIVE_KEY[c1-3] + FACE_FIVE_KEY[c1-4]
 		FACE_FIVE_RANK[handFaceKey] = rank
@@ -115,7 +111,6 @@ func BuildEvalFiveTables() {
 	}
 
 	// Flush
-	fmt.Printf("start flush\n")
 	for c1 = 4; c1 < NB_FACE; c1++ {
 		for c2 = 0; c2 < c1; c2++ {
 			for c3 = 0; c3 < c2; c3++ {
@@ -137,7 +132,6 @@ func BuildEvalFiveTables() {
 	}
 
 	// Full House
-	fmt.Printf("start full-house\n")
 	for c1 = 0; c1 < NB_FACE; c1++ {
 		for c2 = 0; c2 < NB_FACE; c2++ {
 			// No Four of a Kind
@@ -152,7 +146,6 @@ func BuildEvalFiveTables() {
 	}
 
 	// Four of a Kind
-	fmt.Printf("start four-of-a-kind\n")
 	for c1 = 0; c1 < NB_FACE; c1++ {
 		for c2 = 0; c2 < NB_FACE; c2++ {
 			// No 'Five of a Kind'
@@ -167,7 +160,6 @@ func BuildEvalFiveTables() {
 	}
 
 	// Low Straight Flush
-	fmt.Printf("start straight-flush (low)\n")
 	c1 = 3
 	c5 = 12
 	handFaceKey = FLUSH_FIVE_KEY[c1] + FLUSH_FIVE_KEY[c1-1] + FLUSH_FIVE_KEY[c1-2] + FLUSH_FIVE_KEY[c1-3] + FLUSH_FIVE_KEY[c5]
@@ -177,7 +169,6 @@ func BuildEvalFiveTables() {
 	rank += 1
 
 	// Other Straight Flush
-	fmt.Printf("start straight-flush (other)\n")
 	for c1 = 4; c1 < NB_FACE; c1++ {
 		handFaceKey = FLUSH_FIVE_KEY[c1] + FLUSH_FIVE_KEY[c1-1] + FLUSH_FIVE_KEY[c1-2] + FLUSH_FIVE_KEY[c1-3] + FLUSH_FIVE_KEY[c1-4]
 		FLUSH_FIVE_RANK[handFaceKey] = rank
@@ -187,7 +178,9 @@ func BuildEvalFiveTables() {
 	}
 
 	NB_HAND_FIVE_RANK = rank
-	fmt.Printf("NB_HAND_FIVE_RANK = %d\n", NB_HAND_FIVE_RANK)
+	if verbose {
+		fmt.Printf("NB_HAND_FIVE_RANK = %d\n", NB_HAND_FIVE_RANK)
+	}
 
 }
 
@@ -196,11 +189,15 @@ func GetRankFive(c [5]int) int {
 
 	var handFaceKey uint32
 	var handRank int
+	// fmt.Printf("c=%v\n", c)
+	// fmt.Printf("suit=%v\n", [5]int{CARD_SUIT[c[0]], CARD_SUIT[c[1]], CARD_SUIT[c[2]], CARD_SUIT[c[3]], CARD_SUIT[c[4]]})
+	// fmt.Printf("face=%v\n", [5]int{CARD_FACE[c[0]], CARD_FACE[c[1]], CARD_FACE[c[2]], CARD_FACE[c[3]], CARD_FACE[c[4]]})
 
 	if CARD_SUIT[c[0]] == CARD_SUIT[c[1]] &&
 		CARD_SUIT[c[0]] == CARD_SUIT[c[2]] &&
 		CARD_SUIT[c[0]] == CARD_SUIT[c[3]] &&
 		CARD_SUIT[c[0]] == CARD_SUIT[c[4]] {
+		// fmt.Printf(("in flush\n"))
 		handFaceKey = FLUSH_FIVE_KEY[CARD_FACE[c[0]]] +
 			FLUSH_FIVE_KEY[CARD_FACE[c[1]]] +
 			FLUSH_FIVE_KEY[CARD_FACE[c[2]]] +
@@ -208,6 +205,8 @@ func GetRankFive(c [5]int) int {
 			FLUSH_FIVE_KEY[CARD_FACE[c[4]]]
 		handRank = FLUSH_FIVE_RANK[handFaceKey]
 	} else {
+		// fmt.Printf(("in face\n"))
+		// fmt.Printf("face key=%v\n", [5]uint32{FACE_FIVE_KEY[CARD_FACE[c[0]]], FACE_FIVE_KEY[CARD_FACE[c[1]]], FACE_FIVE_KEY[CARD_FACE[c[2]]], FACE_FIVE_KEY[CARD_FACE[c[3]]], FACE_FIVE_KEY[CARD_FACE[c[4]]]})
 		handFaceKey = FACE_FIVE_KEY[CARD_FACE[c[0]]] +
 			FACE_FIVE_KEY[CARD_FACE[c[1]]] +
 			FACE_FIVE_KEY[CARD_FACE[c[2]]] +

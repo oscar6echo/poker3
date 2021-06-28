@@ -32,7 +32,7 @@ var CARD_SUIT [DECK_SIZE]int
 var CARD_FLUSH_KEY [DECK_SIZE]uint32
 var CARD_FACE_KEY [DECK_SIZE]uint32
 
-func Init() {
+func SetupKeys() {
 
 	if MAX_SUIT_KEY >= 2^(1<<SUIT_BIT_SHIFT) {
 		panic("suit keys are too large to be stored in SUIT_BIT_SHIFT bits")
