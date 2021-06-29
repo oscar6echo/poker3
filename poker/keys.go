@@ -32,7 +32,7 @@ var CARD_SUIT [DECK_SIZE]int
 var CARD_FLUSH_KEY [DECK_SIZE]uint32
 var CARD_FACE_KEY [DECK_SIZE]uint32
 
-func SetupKeys() {
+func InitKeys(verbose bool) {
 
 	if MAX_SUIT_KEY >= 2^(1<<SUIT_BIT_SHIFT) {
 		panic("suit keys are too large to be stored in SUIT_BIT_SHIFT bits")
@@ -57,9 +57,13 @@ func SetupKeys() {
 		}
 	}
 
+	if verbose {
+		showKeys()
+	}
+
 }
 
-func ShowKeys() {
+func showKeys() {
 	fmt.Printf("checks\n")
 	s := SUIT_BIT_SHIFT
 	fmt.Printf("\tMAX_SUIT_KEY=%d < 2^SUIT_BIT_SHIFT=2^%d=%d ? %t\n", MAX_SUIT_KEY, s, 1<<s, MAX_SUIT_KEY < 2^(1<<s))

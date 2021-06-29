@@ -5,11 +5,9 @@ import "github.com/oscar6echo/poker3/poker"
 func main() {
 
 	verbose := true
+	poker.Setup(verbose)
 
-	poker.SetupKeys()
-	poker.ShowKeys()
-
-	poker.BuildEvalFiveTables(verbose)
-	poker.BuildEvalSevenTables(verbose)
+	poker.BuildFiveHands(verbose)
+	poker.BuildSevenHands(verbose)
 
 }

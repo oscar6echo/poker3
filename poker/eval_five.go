@@ -2,8 +2,6 @@ package poker
 
 import "fmt"
 
-// const N_HAND = 7462
-
 var FLUSH_FIVE_RANK = make([]int, MAX_FLUSH_FIVE_KEY+1)
 var FACE_FIVE_RANK = make([]int, MAX_FACE_FIVE_KEY+1)
 var HAND_FACES [][5]int
@@ -215,30 +213,4 @@ func GetRankFive(c [5]int) int {
 		handRank = FACE_FIVE_RANK[handFaceKey]
 	}
 	return handRank
-}
-
-func GetRankSeven(c [7]int) int {
-	// input = array of 5 cards all distinct integers from 0 to NB_FACE*NB_SUIT
-
-	bestHandRank := -1
-	var handRank int
-	var arr [5]int
-
-	for c1 := 0; c1 < 7; c1++ {
-		for c2 := 0; c2 < c1; c2++ {
-			k := 0
-			for i := 0; i < 7; i++ {
-				// exclude cards c1 and c2
-				if !(i == c1) && !(i == c2) {
-					arr[k] = c[i]
-					k += 1
-				}
-			}
-			handRank = GetRankFive(arr)
-			if handRank > bestHandRank {
-				bestHandRank = handRank
-			}
-		}
-	}
-	return bestHandRank
 }
