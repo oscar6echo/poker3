@@ -144,6 +144,7 @@ func BuildEvalSevenTables(verbose bool) {
 
 func GetRankSeven(c [7]int) int {
 	// input = array of 5 cards all distinct integers from 0 to NB_FACE*NB_SUIT
+	// in order defined by CARD_NO
 
 	bestHandRank := -1
 	var handRank int
@@ -170,6 +171,7 @@ func GetRankSeven(c [7]int) int {
 
 func GetRank(c [7]int) int {
 	// input = array of 5 cards all distinct integers from 0 to NB_FACE*NB_SUIT
+	// in order defined by CARD_NO
 
 	var handKey uint32
 	var handFaceKey uint32

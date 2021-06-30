@@ -8,10 +8,17 @@ const DECK_SIZE = NB_SUIT * NB_FACE
 const SUIT_MASK = 511
 const SUIT_BIT_SHIFT = 9
 
-// suits: spades, hearts, diamonds, clubs
+var CARD_NO = make(map[string]int)
+var CARD_SY = make(map[int]string)
+
+//  (c)lubs, (d)iamonds, (h)earts, (s)pades
+var SUIT = [4]string{"c", "d", "h", "s"}
+
 var SUIT_KEY = [4]uint32{0, 1, 29, 37}
 
-//  faces: 2, 3, 4, 5, 6, 7, 8, 9, T, J, Q, K, A
+//  faces: 2, 3, 4, 5, 6, 7, 8, 9, T(10), (J)ack, (Q)ueen, (K)ing, (A)ce
+var FACE = [13]string{"2", "3", "4", "5", "6", "7", "8", "9", "T", "J", "Q", "K", "A"}
+
 var FLUSH_FIVE_KEY = [NB_FACE]uint32{0, 1, 2, 4, 8, 16, 32, 56, 104, 192, 352, 672, 1288}
 var FLUSH_SEVEN_KEY = [NB_FACE]uint32{1, 2, 4, 8, 16, 32, 64, 128, 240, 464, 896, 1728, 3328}
 
@@ -34,6 +41,13 @@ var CARD_FACE_KEY [DECK_SIZE]uint32
 
 func InitKeys(verbose bool) {
 
+	for k := range CARD_NO {
+		delete(CARD_NO, k)
+	}
+	for k := range CARD_SY {
+		delete(CARD_SY, k)
+	}
+
 	if MAX_SUIT_KEY >= 2^(1<<SUIT_BIT_SHIFT) {
 		panic("suit keys are too large to be stored in SUIT_BIT_SHIFT bits")
 	}
@@ -45,15 +59,16 @@ func InitKeys(verbose bool) {
 
 	for f := 0; f < NB_FACE; f++ {
 		for s := 0; s < NB_SUIT; s++ {
-			CARD_FACE[NB_SUIT*f+s] = f
-			CARD_SUIT[NB_SUIT*f+s] = s
-		}
-	}
+			n := NB_SUIT*f + s
+			CARD_FACE[n] = f
+			CARD_SUIT[n] = s
 
-	for f := 0; f < NB_FACE; f++ {
-		for s := 0; s < NB_SUIT; s++ {
-			CARD_FLUSH_KEY[NB_SUIT*f+s] = FLUSH_SEVEN_KEY[f]
-			CARD_FACE_KEY[NB_SUIT*f+s] = (FACE_SEVEN_KEY[f] << SUIT_BIT_SHIFT) + SUIT_KEY[s]
+			CARD_FLUSH_KEY[n] = FLUSH_SEVEN_KEY[f]
+			CARD_FACE_KEY[n] = (FACE_SEVEN_KEY[f] << SUIT_BIT_SHIFT) + SUIT_KEY[s]
+
+			symbol := FACE[f] + SUIT[s]
+			CARD_SY[n] = symbol
+			CARD_NO[symbol] = n
 		}
 	}
 
@@ -68,6 +83,12 @@ func showKeys() {
 	s := SUIT_BIT_SHIFT
 	fmt.Printf("\tMAX_SUIT_KEY=%d < 2^SUIT_BIT_SHIFT=2^%d=%d ? %t\n", MAX_SUIT_KEY, s, 1<<s, MAX_SUIT_KEY < 2^(1<<s))
 	fmt.Printf("\tMAX_FACE_SEVEN_KEY=%d < 2^(32-SUIT_BIT_SHIFT)=2^%d=%d ? %t\n", MAX_FACE_SEVEN_KEY, 32-s, 1<<(32-s), MAX_FACE_SEVEN_KEY < 2^(32-1<<s))
+
+	fmt.Printf("\ncards\n")
+	fmt.Printf("\tFACE = %v\n", FACE)
+	fmt.Printf("\tSUIT = %v\n", SUIT)
+	fmt.Printf("\tCARD_NO = %v\n", CARD_NO)
+	fmt.Printf("\tCARD_SY = %v\n", CARD_SY)
 
 	fmt.Printf("\neval keys\n")
 	fmt.Printf("\tNB_FACE = %d\n", NB_FACE)

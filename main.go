@@ -4,10 +4,12 @@ import "github.com/oscar6echo/poker3/poker"
 
 func main() {
 
-	verbose := true
-	poker.Setup(verbose)
+	poker.Setup(true)
 
-	poker.BuildFiveHands(verbose)
-	poker.BuildSevenHands(verbose)
+	// poker.BuildFiveHands(true)
+	// poker.BuildSevenHands(true)
+
+	poker.BuildFiveHandStats(true)
+	poker.BuildSevenHandStats(true)
 
 }

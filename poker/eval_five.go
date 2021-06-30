@@ -184,18 +184,15 @@ func BuildEvalFiveTables(verbose bool) {
 
 func GetRankFive(c [5]int) int {
 	// input = array of 5 cards all distinct integers from 0 to NB_FACE*NB_SUIT
+	// in order defined by CARD_NO
 
 	var handFaceKey uint32
 	var handRank int
-	// fmt.Printf("c=%v\n", c)
-	// fmt.Printf("suit=%v\n", [5]int{CARD_SUIT[c[0]], CARD_SUIT[c[1]], CARD_SUIT[c[2]], CARD_SUIT[c[3]], CARD_SUIT[c[4]]})
-	// fmt.Printf("face=%v\n", [5]int{CARD_FACE[c[0]], CARD_FACE[c[1]], CARD_FACE[c[2]], CARD_FACE[c[3]], CARD_FACE[c[4]]})
 
 	if CARD_SUIT[c[0]] == CARD_SUIT[c[1]] &&
 		CARD_SUIT[c[0]] == CARD_SUIT[c[2]] &&
 		CARD_SUIT[c[0]] == CARD_SUIT[c[3]] &&
 		CARD_SUIT[c[0]] == CARD_SUIT[c[4]] {
-		// fmt.Printf(("in flush\n"))
 		handFaceKey = FLUSH_FIVE_KEY[CARD_FACE[c[0]]] +
 			FLUSH_FIVE_KEY[CARD_FACE[c[1]]] +
 			FLUSH_FIVE_KEY[CARD_FACE[c[2]]] +
@@ -203,8 +200,6 @@ func GetRankFive(c [5]int) int {
 			FLUSH_FIVE_KEY[CARD_FACE[c[4]]]
 		handRank = FLUSH_FIVE_RANK[handFaceKey]
 	} else {
-		// fmt.Printf(("in face\n"))
-		// fmt.Printf("face key=%v\n", [5]uint32{FACE_FIVE_KEY[CARD_FACE[c[0]]], FACE_FIVE_KEY[CARD_FACE[c[1]]], FACE_FIVE_KEY[CARD_FACE[c[2]]], FACE_FIVE_KEY[CARD_FACE[c[3]]], FACE_FIVE_KEY[CARD_FACE[c[4]]]})
 		handFaceKey = FACE_FIVE_KEY[CARD_FACE[c[0]]] +
 			FACE_FIVE_KEY[CARD_FACE[c[1]]] +
 			FACE_FIVE_KEY[CARD_FACE[c[2]]] +

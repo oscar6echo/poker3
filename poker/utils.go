@@ -20,3 +20,29 @@ func check(e error) {
 		panic(e)
 	}
 }
+
+func uniqueStr(arr []string) []string {
+	occured := map[string]bool{}
+	result := []string{}
+	for _, e := range arr {
+		if occured[e] != true {
+			occured[e] = true
+			result = append(result, e)
+		}
+	}
+	return result
+}
+
+func min(a, b int) int {
+	if a < b {
+		return a
+	}
+	return b
+}
+
+func max(a, b int) int {
+	if a < b {
+		return b
+	}
+	return a
+}
