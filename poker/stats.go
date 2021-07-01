@@ -1,17 +1,44 @@
 package poker
 
-import "fmt"
+import (
+	"encoding/json"
+	"fmt"
+)
 
 type handTypeStatsStruct struct {
-	nbHand      int
-	minRank     int
-	maxRank     int
-	nbOccurence int
+	NbHand  int
+	MinRank int
+	MaxRank int
+	NbOccur int
 }
 type handStatsStruct map[string]handTypeStatsStruct
 
-var FiveHandTypeStats = make(map[string]*handTypeStatsStruct)
-var SevenHandTypeStats = make(map[string]*handTypeStatsStruct)
+var FiveHandTypeStats = make(map[string]handTypeStatsStruct)
+var SevenHandTypeStats = make(map[string]handTypeStatsStruct)
+
+var FiveHandTypeStatsTarget = map[string]handTypeStatsStruct{
+	"high-card":       {NbHand: 1277, MinRank: 0, MaxRank: 1276, NbOccur: 1302540},
+	"one-pair":        {NbHand: 2860, MinRank: 1277, MaxRank: 4136, NbOccur: 1098240},
+	"two-pairs":       {NbHand: 858, MinRank: 4137, MaxRank: 4994, NbOccur: 123552},
+	"three-of-a-kind": {NbHand: 858, MinRank: 4995, MaxRank: 5852, NbOccur: 54912},
+	"straight":        {NbHand: 10, MinRank: 5853, MaxRank: 5862, NbOccur: 10200},
+	"flush":           {NbHand: 1277, MinRank: 5863, MaxRank: 7139, NbOccur: 5108},
+	"full-house":      {NbHand: 156, MinRank: 7140, MaxRank: 7295, NbOccur: 3744},
+	"four-of-a-kind":  {NbHand: 156, MinRank: 7296, MaxRank: 7451, NbOccur: 624},
+	"straight-flush":  {NbHand: 10, MinRank: 7452, MaxRank: 7461, NbOccur: 40},
+}
+
+var SevenHandTypeStatsTarget = map[string]handTypeStatsStruct{
+	"high-card":       {NbHand: 407, MinRank: 48, MaxRank: 1276, NbOccur: 23294460},
+	"one-pair":        {NbHand: 1470, MinRank: 1295, MaxRank: 4136, NbOccur: 58627800},
+	"two-pairs":       {NbHand: 763, MinRank: 4140, MaxRank: 4994, NbOccur: 31433400},
+	"three-of-a-kind": {NbHand: 575, MinRank: 5003, MaxRank: 5852, NbOccur: 6461620},
+	"straight":        {NbHand: 10, MinRank: 5853, MaxRank: 5862, NbOccur: 6180020},
+	"flush":           {NbHand: 1277, MinRank: 5863, MaxRank: 7139, NbOccur: 4047644},
+	"full-house":      {NbHand: 156, MinRank: 7140, MaxRank: 7295, NbOccur: 3473184},
+	"four-of-a-kind":  {NbHand: 156, MinRank: 7296, MaxRank: 7451, NbOccur: 224848},
+	"straight-flush":  {NbHand: 10, MinRank: 7452, MaxRank: 7461, NbOccur: 41584},
+}
 
 func BuildFiveHandStats(verbose bool) {
 
@@ -24,7 +51,7 @@ func BuildFiveHandStats(verbose bool) {
 		delete(FiveHandTypeStats, k)
 	}
 
-	handTypeStats := FiveHandTypeStats
+	stats := make(map[string]*handTypeStatsStruct)
 	var rankCount = make(map[int]int)
 
 	var c1, c2, c3, c4, c5 int
@@ -47,21 +74,26 @@ func BuildFiveHandStats(verbose bool) {
 
 	for rank, nbOccur := range rankCount {
 		handType := HAND_TYPE[rank]
-		_, present := handTypeStats[handType]
+		_, present := stats[handType]
 		if !present {
-			handTypeStats[handType] = &handTypeStatsStruct{nbHand: 0, minRank: rank, maxRank: rank, nbOccurence: 0}
+			stats[handType] = &handTypeStatsStruct{NbHand: 0, MinRank: rank, MaxRank: rank, NbOccur: 0}
 		}
-		obj := handTypeStats[handType]
-		obj.nbHand += 1
-		obj.nbOccurence += nbOccur
-		obj.minRank = min(obj.minRank, rank)
-		obj.maxRank = max(obj.maxRank, rank)
+		obj := stats[handType]
+		obj.NbHand += 1
+		obj.NbOccur += nbOccur
+		obj.MinRank = min(obj.MinRank, rank)
+		obj.MaxRank = max(obj.MaxRank, rank)
+	}
+
+	for k, v := range stats {
+		FiveHandTypeStats[k] = *v
 	}
 
 	if verbose {
 		fmt.Printf("stats five cards\n")
-		for k, v := range handTypeStats {
-			fmt.Printf("\tstats=%v\thand-type=%s\n", *v, k)
+		for k, v := range stats {
+			jsonObj, _ := json.Marshal(*v)
+			fmt.Printf("\thand-type=%16s\tstats=%s\n", k, jsonObj)
 		}
 	}
 
@@ -78,7 +110,8 @@ func BuildSevenHandStats(verbose bool) {
 		delete(SevenHandTypeStats, k)
 	}
 
-	handTypeStats := SevenHandTypeStats
+	stats := make(map[string]*handTypeStatsStruct)
+
 	var rankCount = make(map[int]int)
 
 	var c1, c2, c3, c4, c5, c6, c7 int
@@ -103,23 +136,28 @@ func BuildSevenHandStats(verbose bool) {
 		}
 	}
 
-	for rank, nbOccur := range rankCount {
+	for rank, NbOccur := range rankCount {
 		handType := HAND_TYPE[rank]
-		_, present := handTypeStats[handType]
+		_, present := stats[handType]
 		if !present {
-			handTypeStats[handType] = &handTypeStatsStruct{nbHand: 0, minRank: rank, maxRank: rank, nbOccurence: 0}
+			stats[handType] = &handTypeStatsStruct{NbHand: 0, MinRank: rank, MaxRank: rank, NbOccur: 0}
 		}
-		obj := handTypeStats[handType]
-		obj.nbHand += 1
-		obj.nbOccurence += nbOccur
-		obj.minRank = min(obj.minRank, rank)
-		obj.maxRank = max(obj.maxRank, rank)
+		obj := stats[handType]
+		obj.NbHand += 1
+		obj.NbOccur += NbOccur
+		obj.MinRank = min(obj.MinRank, rank)
+		obj.MaxRank = max(obj.MaxRank, rank)
+	}
+
+	for k, v := range stats {
+		SevenHandTypeStats[k] = *v
 	}
 
 	if verbose {
 		fmt.Printf("stats seven cards\n")
-		for k, v := range handTypeStats {
-			fmt.Printf("\tstats=%v\thand-type=%s\n", *v, k)
+		for k, v := range stats {
+			jsonObj, _ := json.Marshal(*v)
+			fmt.Printf("\thand-type=%16s\tstats=%s\n", k, jsonObj)
 		}
 	}
 

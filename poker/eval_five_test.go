@@ -27,8 +27,7 @@ func TestGetRankFive(t *testing.T) {
 		if got != c.rank {
 			t.Errorf("GetRankFive(%v) == %d, want %d", c.cards, got, c.rank)
 		} else {
-			t.Logf("GetRankFive(%v) == %d", c.cards, got)
-
+			// t.Logf("GetRankFive(%v) == %d", c.cards, got)
 		}
 	}
 }

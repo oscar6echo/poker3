@@ -38,7 +38,7 @@ func TestGetRankSeven(t *testing.T) {
 		if got != c.rank {
 			t.Errorf("GetRankSeven(%v) == %d, want %d", c.cards, got, c.rank)
 		} else {
-			t.Logf("GetRankSeven(%v) == %d (%s)", c.cards, got, HAND_TYPE[got])
+			// t.Logf("GetRankSeven(%v) == %d (%s)", c.cards, got, HAND_TYPE[got])
 		}
 	}
 }
@@ -54,7 +54,7 @@ func TestGetRank(t *testing.T) {
 		if got != c.rank {
 			t.Errorf("GetRank(%v) == %d, want %d", c.cards, got, c.rank)
 		} else {
-			t.Logf("GetRank(%v) == %d (%s)", c.cards, got, HAND_TYPE[got])
+			// t.Logf("GetRank(%v) == %d (%s)", c.cards, got, HAND_TYPE[got])
 		}
 	}
 }
