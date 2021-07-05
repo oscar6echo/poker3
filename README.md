@@ -14,4 +14,8 @@ go test -run=XXX -bench=.
 # main ie other test
 # from top repo
 go run main.go
+
+# compile - tinygo
+tinygo build -o ./html/main_js.wasm -target wasm ./main.go
+
 ```

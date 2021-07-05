@@ -7,8 +7,8 @@ import (
 )
 
 type handEquity struct {
-	win float32
-	tie float32
+	Win float32
+	Tie float32
 }
 
 func TryCalcEquity() {
@@ -40,7 +40,6 @@ func CalcEquity(playerCards [][2]int, tableCards []int) []handEquity {
 		log.Fatal("len(playerCards must be 0, 3, 4, 5")
 	}
 
-	// var usedCards []int = buildUsedCards(playerCards, tableCards)
 	var deckCards []int = buildDeckCards(playerCards, tableCards)
 	D := len(deckCards)
 
@@ -48,14 +47,12 @@ func CalcEquity(playerCards [][2]int, tableCards []int) []handEquity {
 	var eqty = make([]*handEquity, P)
 	var equity = make([]handEquity, P)
 	for i := range playerCards {
-		eqty[i] = &handEquity{win: 0, tie: 0}
+		eqty[i] = &handEquity{Win: 0, Tie: 0}
 	}
 
 	var rank = make([]int, len(playerCards))
 	var c1, c2, c3, c4, c5, p, nbGame int
 	var cards [7]int
-
-	// fmt.Println(deckCards)
 
 	nbGame = 0
 
@@ -89,7 +86,6 @@ func CalcEquity(playerCards [][2]int, tableCards []int) []handEquity {
 
 	// 3 table cards
 	if T == 3 {
-		// fmt.Println("TEST")
 		for c1 = 0; c1 < D-2*P-T; c1++ {
 			for c2 = 0; c2 < c1; c2++ {
 				for p = 0; p < P; p++ {
@@ -102,9 +98,7 @@ func CalcEquity(playerCards [][2]int, tableCards []int) []handEquity {
 						deckCards[c1],
 						deckCards[c2],
 					}
-					// fmt.Println(cards)
 					rank[p] = GetRank(cards)
-					// fmt.Println(rank)
 				}
 				updateEquity(playerCards, tableCards, rank, eqty)
 				nbGame++
@@ -151,14 +145,10 @@ func CalcEquity(playerCards [][2]int, tableCards []int) []handEquity {
 		nbGame++
 	}
 
-	// fmt.Println("---", eqty[0], eqty[1], eqty[2])
 	for k, v := range eqty {
-		// fmt.Println(v.win, nbGame, v.win/float32(nbGame))
-		equity[k].win = v.win / float32(nbGame)
-		equity[k].tie = v.tie / float32(nbGame)
+		equity[k].Win = v.Win / float32(nbGame)
+		equity[k].Tie = v.Tie / float32(nbGame)
 	}
-	// fmt.Println("***", equity[0], equity[1], equity[2])
-
 	return equity
 }
 
@@ -207,18 +197,15 @@ func updateEquity(playerCards [][2]int, tableCards []int, rank []int, eqty []*ha
 			nbMax += 1
 		}
 	}
-	// fmt.Println(maxRank)
-	// fmt.Println(nbMax)
 	for p = 0; p < P; p++ {
 		if rank[p] == maxRank {
 			if nbMax == 1 {
-				eqty[p].win += 1
+				eqty[p].Win += 1
 			} else {
-				eqty[p].tie += float32(1 / nbMax)
+				eqty[p].Tie += float32(1 / nbMax)
 			}
 		}
 	}
-	// fmt.Println(eqty[0], eqty[1], eqty[2])
 }
 
 func CalcEquityMonteCarlo(playerCards [2]int, tableCards []int, nbPlayer int, nbGame int) handEquity {
@@ -232,10 +219,9 @@ func CalcEquityMonteCarlo(playerCards [2]int, tableCards []int, nbPlayer int, nb
 		log.Fatal("len(playerCards must be 0, 3, 4, 5")
 	}
 
-	var eqty handEquity = handEquity{win: 0, tie: 0}
+	var eqty handEquity = handEquity{Win: 0, Tie: 0}
 
 	var pCards = [1][2]int{{playerCards[0], playerCards[1]}}
-	// var usedCards []int = buildUsedCards(pCards[:], tableCards)
 	var deckCards []int = buildDeckCards(pCards[:], tableCards)
 	var rndCards = make([]int, 2*(nbPlayer-1)+5-T)
 	var rndTableCards = make([]int, 5-T)
@@ -248,7 +234,6 @@ func CalcEquityMonteCarlo(playerCards [2]int, tableCards []int, nbPlayer int, nb
 
 	for g = 0; g < nbGame; g++ {
 		drawRandomCards(rndCards, deckCards)
-		// fmt.Println("**", g, rndCards)
 
 		for t = 0; t < 5-T; t++ {
 			rndTableCards[t] = rndCards[t]
@@ -293,7 +278,6 @@ func CalcEquityMonteCarlo(playerCards [2]int, tableCards []int, nbPlayer int, nb
 			}
 
 			cards = [7]int{c1, c2, c3, c4, c5, c6, c7}
-			// fmt.Println(cards)
 			rank[p] = GetRank(cards)
 		}
 
@@ -309,19 +293,18 @@ func CalcEquityMonteCarlo(playerCards [2]int, tableCards []int, nbPlayer int, nb
 		}
 		if rank[0] == maxRank {
 			if nbMax == 1 {
-				eqty.win += 1
+				eqty.Win += 1
 			} else {
-				eqty.tie += float32(1 / nbMax)
+				eqty.Tie += float32(1 / nbMax)
 			}
 		}
 
 	}
 
-	eqty.win /= float32(nbGame)
-	eqty.tie /= float32(nbGame)
+	eqty.Win /= float32(nbGame)
+	eqty.Tie /= float32(nbGame)
 
 	return eqty
-
 }
 
 func drawRandomCards(rndCards []int, deckCards []int) {
@@ -332,11 +315,8 @@ func drawRandomCards(rndCards []int, deckCards []int) {
 	R := len(rndCards)
 	c := 0
 
-	// fmt.Println("///")
-
 	for c < R {
 		r = rand.Intn(D)
-		// fmt.Println("cand", r, "with", rndCards, "up to", c)
 		isUsed = false
 		for i = 0; i < c; i++ {
 			if rndCards[i] == deckCards[r] {
@@ -345,10 +325,8 @@ func drawRandomCards(rndCards []int, deckCards []int) {
 			}
 		}
 		if !isUsed {
-			// fmt.Println("valid", r)
 			rndCards[c] = deckCards[r]
 			c++
 		}
-
 	}
 }
