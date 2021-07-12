@@ -33,6 +33,8 @@
 
         console.log("WASM functions added to global scope:", window.wasmDoc());
 
+        console.log(`getHandTypes() =`, window.getHandTypes());
+
         cards = [21, 33, 24, 22, 39];
         console.log(`getRankFive(${cards}) =`, window.getRankFive(cards));
 
@@ -55,20 +57,20 @@
           window.calcEquity(players, table)
         );
 
-        console.time("calcEquityMonteCarlo");
-        players = [2, 18];
-        table = [41, 8, 30];
-        nbPlayer = 4;
-        nbGame = 1e6;
-        console.log(
-          `calcEquityMonteCarlo([${players}], [${table}], ${nbPlayer}, ${nbGame}) =`,
-          window.calcEquityMonteCarlo(players, table, nbPlayer, nbGame)
-        );
-        console.timeEnd("calcEquityMonteCarlo");
+        // console.time("calcEquityMonteCarlo");
+        // players = [2, 18];
+        // table = [41, 8, 30];
+        // nbPlayer = 4;
+        // nbGame = 1e6;
+        // console.log(
+        //   `calcEquityMonteCarlo([${players}], [${table}], ${nbPlayer}, ${nbGame}) =`,
+        //   window.calcEquityMonteCarlo(players, table, nbPlayer, nbGame)
+        // );
+        // console.timeEnd("calcEquityMonteCarlo");
 
-        console.time("buildFiveHandStats");
-        console.log(`buildFiveHandStats(false) =`, window.buildFiveHandStats());
-        console.timeEnd("buildFiveHandStats");
+        // console.time("buildFiveHandStats");
+        // console.log(`buildFiveHandStats(false) =`, window.buildFiveHandStats());
+        // console.timeEnd("buildFiveHandStats");
       }
     </script>
   </body>

@@ -19,6 +19,7 @@ func main() {
 	js.Global().Set("calcEquityMonteCarlo", js.FuncOf(calcEquityMonteCarlo))
 	js.Global().Set("buildFiveHandStats", js.FuncOf(buildFiveHandStats))
 	// js.Global().Set("buildSevenHandStats", js.FuncOf(buildSevenHandStats))
+	js.Global().Set("getHandTypes", js.FuncOf(getHandTypes))
 
 	js.Global().Set("wasmDoc", js.FuncOf(wasmDoc))
 
@@ -35,6 +36,7 @@ func wasmDoc(this js.Value, args []js.Value) interface{} {
 		"calcEquityMonteCarlo",
 		"buildFiveHandStats",
 		// "buildSevenHandStats",
+		"getHandTypes",
 	}
 
 	for _, e := range funcNames {
@@ -164,3 +166,16 @@ func buildFiveHandStats(this js.Value, args []js.Value) interface{} {
 
 // 	return js.ValueOf(result)
 // }
+
+func getHandTypes(this js.Value, args []js.Value) interface{} {
+
+	println("AA")
+	result := make([]interface{}, poker.NB_HAND_FIVE_RANK)
+	for i, e := range poker.HAND_TYPE {
+		result[i] = e
+	}
+	println("BB")
+	println(result[100], result[110])
+
+	return js.ValueOf(result)
+}
