@@ -12,6 +12,7 @@ type handEquity struct {
 }
 
 func TryCalcEquity() {
+	defer track(runningtime("TryCalcEquity"))
 
 	var playerCards = [][2]int{{2, 18}, {5, 22}, {6, 34}}
 	var tableCards = []int{41, 8, 30}
@@ -22,6 +23,7 @@ func TryCalcEquity() {
 }
 
 func TryCalcEquityMonteCarlo() {
+	defer track(runningtime("TryCalcEquityMonteCarlo"))
 
 	var playerCards = [2]int{2, 18}
 	var tableCards = []int{41, 8, 30}

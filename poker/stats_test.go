@@ -9,9 +9,9 @@ import (
 func TestBuildFiveHandStats(t *testing.T) {
 
 	Setup(false)
-	BuildFiveHandStats(false)
+	stats := BuildFiveHandStats(false)
 
-	got := FiveHandTypeStats
+	got := stats
 	want := FiveHandTypeStatsTarget
 	same := reflect.DeepEqual(got, want)
 
@@ -27,9 +27,9 @@ func TestBuildFiveHandStats(t *testing.T) {
 func TestBuildSevenHandStats(t *testing.T) {
 
 	Setup(false)
-	BuildSevenHandStats(false)
+	stats := BuildSevenHandStats(false)
 
-	got := SevenHandTypeStats
+	got := stats
 	want := SevenHandTypeStatsTarget
 	same := reflect.DeepEqual(got, want)
 

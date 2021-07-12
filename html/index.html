@@ -1,0 +1,75 @@
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>WASM</title>
+  </head>
+  <body>
+    <h3>TinyGo WASM Demo 2</h3>
+    <p>Open console</p>
+    <button onClick="run();" id="run-button" disabled>Run</button>
+
+    <script src="wasm_exec.js"></script>
+    <script>
+      const main = async () => {
+        const go = new Go(); // Defined in wasm_exec.js
+
+        const WASM_URL = "main_js.wasm";
+        const obj = await WebAssembly.instantiateStreaming(
+          fetch(WASM_URL),
+          go.importObject
+        );
+        window.wasm = obj.instance;
+        go.run(wasm);
+        console.log("WASM functions added to global scope:", window.wasmDoc());
+
+        document.getElementById("run-button").disabled = false;
+      };
+
+      main();
+
+      async function run() {
+        // let t0, t1;
+        let cards, players, table;
+
+        console.log("WASM functions added to global scope:", window.wasmDoc());
+
+        cards = [21, 33, 24, 22, 39];
+        console.log(`getRankFive(${cards}) =`, window.getRankFive(cards));
+
+        cards = [51, 38, 14, 36, 17];
+        console.log(`getRankFive(${cards}) =`, window.getRankFive(cards));
+
+        cards = [50, 6, 0, 5, 38, 7, 17];
+        console.log(`getRank(${cards}) =`, window.getRank(cards));
+        cards = [23, 16, 34, 26, 0, 10, 8];
+        console.log(`getRank(${cards}) =`, window.getRank(cards));
+
+        players = [
+          [2, 18],
+          [5, 22],
+          [6, 34],
+        ];
+        table = [41, 8, 30];
+        console.log(
+          `calcEquity([${players}], [${table}]) =`,
+          window.calcEquity(players, table)
+        );
+
+        console.time("calcEquityMonteCarlo");
+        players = [2, 18];
+        table = [41, 8, 30];
+        nbPlayer = 4;
+        nbGame = 1e6;
+        console.log(
+          `calcEquityMonteCarlo([${players}], [${table}], ${nbPlayer}, ${nbGame}) =`,
+          window.calcEquityMonteCarlo(players, table, nbPlayer, nbGame)
+        );
+        console.timeEnd("calcEquityMonteCarlo");
+
+        console.time("buildFiveHandStats");
+        console.log(`buildFiveHandStats(false) =`, window.buildFiveHandStats());
+        console.timeEnd("buildFiveHandStats");
+      }
+    </script>
+  </body>
+</html>

@@ -9,14 +9,16 @@ import (
 func main() {
 	c := make(chan struct{}, 0)
 
+	poker.Setup(false)
+
 	println("Go WASM initialized")
 
-	js.Global().Set("getRank", js.FuncOf(getRank))
 	js.Global().Set("getRankFive", js.FuncOf(getRankFive))
+	js.Global().Set("getRank", js.FuncOf(getRank))
 	js.Global().Set("calcEquity", js.FuncOf(calcEquity))
 	js.Global().Set("calcEquityMonteCarlo", js.FuncOf(calcEquityMonteCarlo))
 	js.Global().Set("buildFiveHandStats", js.FuncOf(buildFiveHandStats))
-	js.Global().Set("buildSevenHandStats", js.FuncOf(buildSevenHandStats))
+	// js.Global().Set("buildSevenHandStats", js.FuncOf(buildSevenHandStats))
 
 	js.Global().Set("wasmDoc", js.FuncOf(wasmDoc))
 
@@ -26,10 +28,32 @@ func main() {
 func wasmDoc(this js.Value, args []js.Value) interface{} {
 	// return name of functions set to global scope in main()
 	result := make([]interface{}, 0)
-	var funcNames = []string{"getRank", "getRankFive", "buildFiveHandStats", "buildSevenHandStats"}
+	var funcNames = []string{
+		"getRank",
+		"getRankFive",
+		"calcEquity",
+		"calcEquityMonteCarlo",
+		"buildFiveHandStats",
+		// "buildSevenHandStats",
+	}
+
 	for _, e := range funcNames {
 		result = append(result, e)
 	}
+	return js.ValueOf(result)
+}
+
+func getRankFive(this js.Value, args []js.Value) interface{} {
+	arrIn := args[0]
+
+	var arr [5]int
+	for i := 0; i < 5; i++ {
+		arr[i] = arrIn.Index(i).Int()
+	}
+
+	rank := poker.GetRankFive(arr)
+	result := rank
+
 	return js.ValueOf(result)
 }
 
@@ -42,20 +66,6 @@ func getRank(this js.Value, args []js.Value) interface{} {
 	}
 
 	rank := poker.GetRank(arr)
-	result := rank
-
-	return js.ValueOf(result)
-}
-
-func getRankFive(this js.Value, args []js.Value) interface{} {
-	arrIn := args[0]
-
-	var arr [5]int
-	for i := 0; i < 7; i++ {
-		arr[i] = arrIn.Index(i).Int()
-	}
-
-	rank := poker.GetRankFive(arr)
 	result := rank
 
 	return js.ValueOf(result)
@@ -126,34 +136,31 @@ func calcEquityMonteCarlo(this js.Value, args []js.Value) interface{} {
 
 func buildFiveHandStats(this js.Value, args []js.Value) interface{} {
 
-	poker.BuildFiveHandStats(false)
-	res := poker.FiveHandTypeStats
+	res := poker.BuildFiveHandStats(false)
 
 	result := make(map[string]interface{})
 	for k, v := range res {
-		var obj map[string]interface{}
-		obj["nbHand"] = v.NbHand
-		obj["minRank"] = v.MinRank
-		obj["maxRank"] = v.MaxRank
-		obj["nbOccur"] = v.NbOccur
-		result[k] = obj
+		result[k+"|NbHand"] = v.NbHand
+		result[k+"|MinRank"] = v.MinRank
+		result[k+"|MaxRank"] = v.MaxRank
+		result[k+"|NbOccur"] = v.NbOccur
 	}
+
 	return js.ValueOf(result)
 }
 
-func buildSevenHandStats(this js.Value, args []js.Value) interface{} {
+// func buildSevenHandStats(this js.Value, args []js.Value) interface{} {
 
-	poker.BuildSevenHandStats(false)
-	res := poker.SevenHandTypeStats
+// 	poker.BuildFiveHandStats(false)
+// 	res := poker.SevenHandTypeStats
 
-	result := make(map[string]interface{})
-	for k, v := range res {
-		var obj map[string]interface{}
-		obj["nbHand"] = v.NbHand
-		obj["minRank"] = v.MinRank
-		obj["maxRank"] = v.MaxRank
-		obj["nbOccur"] = v.NbOccur
-		result[k] = obj
-	}
-	return js.ValueOf(result)
-}
+// 	result := make(map[string]interface{})
+// 	for k, v := range res {
+// 		result[k+"|NbHand"] = v.NbHand
+// 		result[k+"|MinRank"] = v.MinRank
+// 		result[k+"|MaxRank"] = v.MaxRank
+// 		result[k+"|NbOccur"] = v.NbOccur
+// 	}
+
+// 	return js.ValueOf(result)
+// }

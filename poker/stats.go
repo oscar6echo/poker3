@@ -13,9 +13,6 @@ type handTypeStatsStruct struct {
 }
 type handStatsStruct map[string]handTypeStatsStruct
 
-var FiveHandTypeStats = make(map[string]handTypeStatsStruct)
-var SevenHandTypeStats = make(map[string]handTypeStatsStruct)
-
 var FiveHandTypeStatsTarget = map[string]handTypeStatsStruct{
 	"high-card":       {NbHand: 1277, MinRank: 0, MaxRank: 1276, NbOccur: 1302540},
 	"one-pair":        {NbHand: 2860, MinRank: 1277, MaxRank: 4136, NbOccur: 1098240},
@@ -40,16 +37,14 @@ var SevenHandTypeStatsTarget = map[string]handTypeStatsStruct{
 	"straight-flush":  {NbHand: 10, MinRank: 7452, MaxRank: 7461, NbOccur: 41584},
 }
 
-func BuildFiveHandStats(verbose bool) {
+func BuildFiveHandStats(verbose bool) map[string]handTypeStatsStruct {
 
 	if verbose {
 		fmt.Println(" ")
 		defer track(runningtime("BuildFiveHandStats"))
 	}
 
-	for k := range FiveHandTypeStats {
-		delete(FiveHandTypeStats, k)
-	}
+	var FiveHandTypeStats = make(map[string]handTypeStatsStruct)
 
 	stats := make(map[string]*handTypeStatsStruct)
 	var rankCount = make(map[int]int)
@@ -97,18 +92,17 @@ func BuildFiveHandStats(verbose bool) {
 		}
 	}
 
+	return FiveHandTypeStats
 }
 
-func BuildSevenHandStats(verbose bool) {
+func BuildSevenHandStats(verbose bool) map[string]handTypeStatsStruct {
 
 	if verbose {
 		fmt.Println(" ")
 		defer track(runningtime("BuildSevenHandStats"))
 	}
 
-	for k := range SevenHandTypeStats {
-		delete(SevenHandTypeStats, k)
-	}
+	var SevenHandTypeStats = make(map[string]handTypeStatsStruct)
 
 	stats := make(map[string]*handTypeStatsStruct)
 
@@ -160,5 +154,7 @@ func BuildSevenHandStats(verbose bool) {
 			fmt.Printf("\thand-type=%16s\tstats=%s\n", k, jsonObj)
 		}
 	}
+
+	return SevenHandTypeStats
 
 }
