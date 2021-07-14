@@ -14,8 +14,11 @@ type handEquity struct {
 func TryCalcEquity() {
 	defer track(runningtime("TryCalcEquity"))
 
-	var playerCards = [][2]int{{2, 18}, {5, 22}, {6, 34}}
-	var tableCards = []int{41, 8, 30}
+	// var playerCards = [][2]int{{2, 18}, {5, 22}, {6, 34}}
+	// var tableCards = []int{41, 8, 30}
+
+	var playerCards = [][2]int{{7, 29}, {4, 11}}
+	var tableCards = []int{}
 
 	var eqty = CalcEquity(playerCards, tableCards)
 	fmt.Println(eqty)
@@ -204,7 +207,7 @@ func updateEquity(playerCards [][2]int, tableCards []int, rank []int, eqty []*ha
 			if nbMax == 1 {
 				eqty[p].Win += 1
 			} else {
-				eqty[p].Tie += float32(1 / nbMax)
+				eqty[p].Tie += 1 / float32(nbMax)
 			}
 		}
 	}
