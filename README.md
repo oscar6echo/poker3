@@ -4,12 +4,12 @@
 
 This repo contains:
 
-- [poker](./poker): A Go package to evaluate Poker hands
-- [keygen-go](./keygen-go): A Go script to search for keys used in package **poker**
-- [keygen-c](./keygen-c): A C script to search for keys used in package poker - faster than **keygen-go**
-- [serve](./serve): A Go script to serve folder [html](./html)
-- [html](./html): A minimal web page using a WASM module compiled from script [main.go](./main.go) using package **poker**
-- [wip](./wip): A sample script using package **poker**
+- [poker](./poker): A **Go package** to evaluate Poker hands - Texas Hold'em
+- [keygen-go](./keygen-go): A **Go script** to search for keys used in package **poker**
+- [keygen-c](./keygen-c): A **C script** to search for keys used in package poker - faster than **keygen-go**
+- [serve](./serve): A **Go script** to serve folder [html](./html)
+- [html](./html): A minimal **web page** using a **WASM module** compiled from script [main.go](./main.go) using package **poker**
+- [wip](./wip): A sample **Go script** using package **poker**
 
 Ref:
 
