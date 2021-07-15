@@ -15,7 +15,7 @@ Ref:
 
 - repo [oscar6echo/tinygo-wasm-demo-2](https://github.com/oscar6echo/tinygo-wasm-demo-2)
 - [Go package syscall/js doc](https://pkg.go.dev/syscall/js)
-- ObservableHQ notebook [Poker Hand Evaluator - WASM](TBD)
+- ObservableHQ notebook [Poker Hand Evaluator - WASM](https://observablehq.com/@oscar6echo/poker-hand-evaluator-wasm)
 
 ## Poker Go package
 
@@ -91,4 +91,4 @@ go run serve/serve.go
 Portability is achieved as the poker package is exposed to a web page.  
 But performance is **surprisingly poor**: function `TestBuildFiveHandStats` takes about 50s in the webpage vs. 0.1s in native Go !!!
 
-_NOTE_: Script `wasm_exec.js` is used in web page [html/index.html](./html/index.html). `wasm_exec_mod.js` is its conversion to a JavaScript module, used in ObservableHQ notebook [Poker Hand Evaluator - WASM](TBD).
+_NOTE_: Script `wasm_exec.js` is used in web page [html/index.html](./html/index.html). `wasm_exec_mod.js` is its conversion to a JavaScript module, used in ObservableHQ notebook [Poker Hand Evaluator - WASM](https://observablehq.com/@oscar6echo/poker-hand-evaluator-wasm).
